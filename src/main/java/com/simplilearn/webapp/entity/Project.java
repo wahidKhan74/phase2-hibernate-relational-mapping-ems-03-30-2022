@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -22,7 +23,12 @@ public class Project {
 
 	@Column(name = "project_title")
 	private String projectTitle;
-
+	
+	// many to one -> many project one employee
+	@ManyToOne
+	private Employee employee;
+	
+	
 	// constructor
 	public Project(String projectNo, String projectTitle) {
 		this.projectNo = projectNo;
@@ -56,6 +62,14 @@ public class Project {
 
 	public void setProjectTitle(String projectTitle) {
 		this.projectTitle = projectTitle;
+	}
+	
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 
 	// tostring
