@@ -20,8 +20,8 @@ import com.simplilearn.webapp.entity.Payroll;
 import com.simplilearn.webapp.entity.Project;
 import com.simplilearn.webapp.util.HibernateSessionUtil;
 
-@WebServlet("/add-project-with-employee")
-public class AddProjectWithEmployee extends HttpServlet {
+@WebServlet("/add-employee-with-project")
+public class AddEmployeeWithProject extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,10 +30,10 @@ public class AddProjectWithEmployee extends HttpServlet {
 		response.setContentType("text/html");
 
 		request.getRequestDispatcher("index.jsp").include(request, response);
-		request.getRequestDispatcher("add-project-with-employee.html").include(request, response);
+		request.getRequestDispatcher("add-employee-with-project.html").include(request, response);
 	}
 
-	// submitted create action
+	// submitted action
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -43,18 +43,18 @@ public class AddProjectWithEmployee extends HttpServlet {
 
 		// fetch data from request
 
-		// project multiple project details 
-		String P1name = request.getParameter("project1-name");
-		String P1no = request.getParameter("project1-no");
-
-		String P2name = request.getParameter("project2-name");
-		String P2no = request.getParameter("project2-no");
-
 		// employee personal information
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
 		double salary = Double.parseDouble(request.getParameter("salary"));
 		String dept = request.getParameter("dept");
+
+		// project info
+		String P1name = request.getParameter("project1-name");
+		String P1no = request.getParameter("project1-no");
+
+		String P2name = request.getParameter("project2-name");
+		String P2no = request.getParameter("project2-no");
 
 		// build hibernate session
 		try {
@@ -68,30 +68,26 @@ public class AddProjectWithEmployee extends HttpServlet {
 			Transaction tx = session.beginTransaction();
 
 			// 4. create persistence object / add product
-			// create a employee object
+			Set<Project> projects = new HashSet<Project>();
+			projects.add(new Project(P1no, P1name));
+			projects.add(new Project(P2no, P2name));
+
 			Employee employee = new Employee(firstName, lastName, salary, dept);
-			session.persist(employee);
-			
-			//4.1  create project object
-			Project p1 = new Project(P1no, P1name);
-			// p1.setEmployee(employee);
-			
-			Project p2 = new Project(P2no, P2name);
-			// p2.setEmployee(employee);
-			
+
+			// add projects list to employee
+			employee.setProjects(projects);
 
 			// 5. save product
-			//session.save(p1);
-			// session.save(p2);
+			session.save(employee);
 
 			// 6. commit transaction
 			tx.commit();
 
-			out.print("<h3 style='color:green'> Project is created with employee successfully !<h3>");
+			out.print("<h3 style='color:green'> Employee is created with projects successfully !<h3>");
 			// 3. close session
 			session.close();
 		} catch (Exception e) {
-			out.print("<h3 style='color:red'> Create Project failed ! <h3>" + e);
+			out.print("<h3 style='color:red'> Create Employee failed ! <h3>" + e);
 		}
 	}
 }

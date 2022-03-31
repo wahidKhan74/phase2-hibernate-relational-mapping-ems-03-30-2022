@@ -12,6 +12,7 @@
 
 	<br>
 	<br>
-	<a href="add-project-with-employee">Add Project with Employee</a>
+	<a href="add-project-with-employee">Add Project with Employee</a> ||
+	<a href="add-employee-with-project">Add Employee with Project (Many To Many)</a>
 </body>
 </html>

@@ -1,10 +1,17 @@
 package com.simplilearn.webapp.entity;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -23,12 +30,13 @@ public class Project {
 
 	@Column(name = "project_title")
 	private String projectTitle;
-	
-	// many to one -> many project one employee
-	@ManyToOne
-	private Employee employee;
-	
-	
+
+	// many to many
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "projects__employees", joinColumns = @JoinColumn(name = "project_id"), 
+	inverseJoinColumns = @JoinColumn(name = "emp_id"))
+	private Set<Employee> employees;
+
 	// constructor
 	public Project(String projectNo, String projectTitle) {
 		this.projectNo = projectNo;
@@ -62,14 +70,6 @@ public class Project {
 
 	public void setProjectTitle(String projectTitle) {
 		this.projectTitle = projectTitle;
-	}
-	
-	public Employee getEmployee() {
-		return employee;
-	}
-
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
 	}
 
 	// tostring
